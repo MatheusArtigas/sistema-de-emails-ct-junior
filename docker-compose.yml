@@ -1,0 +1,12 @@
+services:
+  postgres:
+    image: bitnami/postgresql:latest
+    container_name: email-system
+
+    ports:
+      - "5432:5432"
+
+    environment:
+      POSTGRESQL_USERNAME: ctjunior
+      POSTGRESQL_PASSWORD: ctjunior
+      POSTGRESQL_DATABASE: email-system

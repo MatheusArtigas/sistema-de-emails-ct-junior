@@ -1,0 +1,32 @@
+{
+  "devDependencies": {
+    "@prisma/cli-engine": "^0.9.0",
+    "@types/bcrypt": "^6.0.0",
+    "@types/node": "^26.6.5",
+    "prisma": "^8.0.0-rc.25",
+    "tsup": "^9.0.0",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
+  },
+  "dependencies": {
+    "@prisma/orm-postgres": "^8.0.0-rc.19",
+    "bcrypt": "^6.0.0",
+    "dotenv": "^18.0.8",
+    "fastify": "^5.12.7",
+    "zod": "^4.6.7"
+  },
+  "name": "pp_ctjunior",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "start": "node build/server.js",
+    "build": "tsup src --out-dir build",
+    "contract:emit": "prisma contract emit"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module"
+}

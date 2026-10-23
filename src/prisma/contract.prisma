@@ -1,0 +1,34 @@
+// use prisma-8
+
+model User {
+  id            Uuid    @id @onCreate(uuid())
+  nome          String
+  email         String  @unique
+  senha         String
+  fotoDePerfil  String?
+
+  emailsEnviados  Email[] @relation("EmailsEnviados")
+  emailsRecebidos Email[] @relation("EmailsRecebidos")
+}
+
+model Email {
+  id                  Uuid     @id @onCreate(uuid())
+  title               String
+  data                DateTime @default(now())
+  content             String
+  jaVisto             Boolean  @default(false)
+  idDeQuemEnviou      Uuid
+  idDeQuemRecebeu     Uuid
+
+  remetente User @relation(
+    "EmailsEnviados",
+    fields: [idDeQuemEnviou],
+    references: [id]
+  )
+
+  destinatario User @relation(
+    "EmailsRecebidos",
+    fields: [idDeQuemRecebeu],
+    references: [id]
+  )
+}
