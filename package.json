@@ -9,6 +9,7 @@
     "typescript": "^7.0.2"
   },
   "dependencies": {
+    "@fastify/jwt": "^10.2.5",
     "@prisma/orm-postgres": "^8.0.0-rc.19",
     "bcrypt": "^6.0.0",
     "dotenv": "^18.0.8",
