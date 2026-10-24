@@ -1,8 +1,14 @@
 import type { FastifyInstance } from 'fastify'
 import { registroDeUsuarios } from './controllers/registro-de-usuario.js'
 import { autenticacao } from './controllers/autenticacao.js'
+import { verificarJWT } from './middlewares/verifica-jwt.js'
+import { meusEmails } from './controllers/meus-emails.js'
 
 export async function rotas(app: FastifyInstance) {
   app.post('/user', registroDeUsuarios)
   app.post('/login', autenticacao)
+
+  app.get('/my-emails', {  
+  onRequest: [verificarJWT]
+  }, meusEmails)
 }
