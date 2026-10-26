@@ -1,5 +1,5 @@
 import type { FastifyRequest, FastifyReply } from 'fastify'
-import { buscarEmailsRecebidos } from '../../repositories/emails'
+import { buscarEmailsRecebidos } from '../../repositories/emails.js'
 
 export async function meusEmails(
   request: FastifyRequest,

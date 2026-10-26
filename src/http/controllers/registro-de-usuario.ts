@@ -1,8 +1,7 @@
 import type { FastifyRequest, FastifyReply } from 'fastify'
 import { z } from 'zod'
-import bcrypt from 'bcrypt'
-import { UsuarioJaExiste } from '../../errors/usuario-ja-existe.js'
-import { buscarUsuarioPorEmail, criarUsuario } from '../../repositories/users.js'
+import { PrismaUsersRepository } from '../../repositories/prisma/prisma-users-repository.js'
+import { RegistroDeUsuarioUseCase } from '../../use-cases/registro-de-usuario.js'
 
 export async function registroDeUsuarios(
   request: FastifyRequest,
@@ -16,19 +15,8 @@ export async function registroDeUsuarios(
 
   const { nome, email, senha } = esquemaRegistro.parse(request.body)
 
-  const usuarioExistente = await buscarUsuarioPorEmail(email)
-
-  if (usuarioExistente) {
-    throw new UsuarioJaExiste()
-  }
-
-  const senhaHash = await bcrypt.hash(senha, 6)
-
-  await criarUsuario({
-    nome,
-    email,
-    senha: senhaHash,
-  })
+  const registroDeUsuarioUseCase = new RegistroDeUsuarioUseCase(new PrismaUsersRepository())
+  await registroDeUsuarioUseCase.execute({ nome, email, senha })
 
   return reply.status(201).send()
 }

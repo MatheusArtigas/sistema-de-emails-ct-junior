@@ -1,8 +1,7 @@
 import type { FastifyRequest, FastifyReply } from 'fastify'
 import { z } from 'zod'
-import bcrypt from 'bcrypt'
-import { ErroDeAutenticacao } from '../../errors/erro-de-autenticacao.js'
-import { buscarUsuarioPorEmail } from '../../repositories/users.js'
+import { PrismaUsersRepository } from '../../repositories/prisma/prisma-users-repository.js'
+import { AutenticacaoUseCase } from '../../use-cases/autenticacao.js'
 
 export async function autenticacao(
   request: FastifyRequest,
@@ -14,15 +13,18 @@ export async function autenticacao(
   })
 
   const { email, senha } = esquemaAutenticacao.parse(request.body)
-  const usuario = await buscarUsuarioPorEmail(email)
 
-  if (!usuario || !(await bcrypt.compare(senha, usuario.senha))) {
-    throw new ErroDeAutenticacao()
-  }
+  const repository = new PrismaUsersRepository()
+  const autenticacaoUseCase = new AutenticacaoUseCase(repository)
 
-  const token = await reply.jwtSign({ 
-    sub: usuario.id },
-    { expiresIn: '2h'}
+  const { usuario } = await autenticacaoUseCase.execute({
+    email,
+    senha,
+  })
+
+  const token = await reply.jwtSign(
+    { sub: usuario.id },
+    { expiresIn: '2h' }
   )
 
   return reply.status(200).send({ token })
