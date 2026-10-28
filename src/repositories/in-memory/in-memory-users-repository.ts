@@ -13,4 +13,18 @@ export class InMemoryUsersRepository implements UsersRepository {
     this.usuarios.push(usuario)
     return usuario
   }
+
+  async atualizarFotoDePerfil(foto: string, userId: string) {
+  const usuario = this.usuarios.find(
+    (usuario) => usuario.id === userId
+  )
+
+  if (!usuario) {
+    return null
+  }
+
+  usuario.fotoDePerfil = foto
+
+  return usuario
+}
 }

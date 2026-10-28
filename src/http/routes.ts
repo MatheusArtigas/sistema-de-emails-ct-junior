@@ -3,6 +3,7 @@ import { registroDeUsuarios } from './controllers/registro-de-usuario.js'
 import { autenticacao } from './controllers/autenticacao.js'
 import { verificarJWT } from './middlewares/verifica-jwt.js'
 import { meusEmails } from './controllers/meus-emails.js'
+import { atualizarFoto } from './controllers/atualizar-perfil.js'
 
 export async function rotas(app: FastifyInstance) {
   app.post('/user', registroDeUsuarios)
@@ -11,4 +12,8 @@ export async function rotas(app: FastifyInstance) {
   app.get('/my-emails', {  
   onRequest: [verificarJWT]
   }, meusEmails)
+
+  app.patch('/my-image', {
+    onRequest: [verificarJWT]
+  }, atualizarFoto)
 }

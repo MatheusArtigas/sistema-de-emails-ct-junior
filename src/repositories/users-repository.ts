@@ -15,4 +15,6 @@ export interface DadosDeCriacaoDeUsuario {
 export interface UsersRepository {
   buscarUsuarioPorEmail(email: string): Promise<Usuario | null>
   criarUsuario(dados: DadosDeCriacaoDeUsuario): Promise<Usuario>
+  atualizarFotoDePerfil(foto: string, userId: string): Promise<Usuario | null>
 }
+
