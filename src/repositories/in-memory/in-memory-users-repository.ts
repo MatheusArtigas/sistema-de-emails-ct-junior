@@ -15,16 +15,30 @@ export class InMemoryUsersRepository implements UsersRepository {
   }
 
   async atualizarFotoDePerfil(foto: string, userId: string) {
-  const usuario = this.usuarios.find(
-    (usuario) => usuario.id === userId
-  )
+    const usuario = this.usuarios.find(
+      (usuario) => usuario.id === userId
+    )
 
-  if (!usuario) {
-    return null
+    if (!usuario) {
+      return null
+    }
+
+    usuario.fotoDePerfil = foto
+
+    return usuario
   }
 
-  usuario.fotoDePerfil = foto
+  async atualizarNomeDeUsuario(nomeNovo: string, userId: string) {
+    const usuario = this.usuarios.find(
+      (usuario) => usuario.id === userId
+    )
 
-  return usuario
-}
+    if (!usuario) {
+      return null
+    }
+
+    usuario.nome = nomeNovo
+
+    return usuario
+  }
 }

@@ -17,4 +17,10 @@ export class PrismaUsersRepository implements UsersRepository {
       .where({ id: userId })
       .update({ fotoDePerfil: foto })
   }
+
+  async atualizarNomeDeUsuario(nomeNovo: string, userId: string) {
+    return db.orm.public.User
+      .where({ id: userId })
+      .update({ nome: nomeNovo})
+  }
 }
