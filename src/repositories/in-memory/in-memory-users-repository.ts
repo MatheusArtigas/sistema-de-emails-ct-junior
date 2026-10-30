@@ -11,6 +11,7 @@ export class InMemoryUsersRepository implements UsersRepository {
   async criarUsuario(dados: DadosDeCriacaoDeUsuario) {
     const usuario: Usuario = { ...dados, id: randomUUID(), fotoDePerfil: null }
     this.usuarios.push(usuario)
+    
     return usuario
   }
 

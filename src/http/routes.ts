@@ -2,7 +2,7 @@ import type { FastifyInstance } from 'fastify'
 import { registroDeUsuarios } from './controllers/registro-de-usuario.js'
 import { autenticacao } from './controllers/autenticacao.js'
 import { verificarJWT } from './middlewares/verifica-jwt.js'
-import { meusEmails } from './controllers/meus-emails.js'
+import { deletarEmail, meusEmails } from './controllers/meus-emails.js'
 import { atualizarFoto, atualizarNome } from './controllers/atualizar-perfil.js'
 
 export async function rotas(app: FastifyInstance) {
@@ -20,4 +20,8 @@ export async function rotas(app: FastifyInstance) {
     app.patch('/my-name', {
     onRequest: [verificarJWT]
   }, atualizarNome)
+
+    app.delete('/email/:id', {
+    onRequest: [verificarJWT]
+  }, deletarEmail)
 }
