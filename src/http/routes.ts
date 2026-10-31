@@ -4,6 +4,7 @@ import { autenticacao } from './controllers/autenticacao.js'
 import { verificarJWT } from './middlewares/verifica-jwt.js'
 import { deletarEmail, meusEmails } from './controllers/meus-emails.js'
 import { atualizarFoto, atualizarNome } from './controllers/atualizar-perfil.js'
+import { enviarEmail } from './controllers/mandar-email.js'
 
 export async function rotas(app: FastifyInstance) {
   app.post('/user', registroDeUsuarios)
@@ -17,11 +18,15 @@ export async function rotas(app: FastifyInstance) {
     onRequest: [verificarJWT]
   }, atualizarFoto)
 
-    app.patch('/my-name', {
+  app.patch('/my-name', {
     onRequest: [verificarJWT]
   }, atualizarNome)
 
-    app.delete('/email/:id', {
+  app.delete('/email/:id', {
     onRequest: [verificarJWT]
   }, deletarEmail)
+
+  app.post('/email', {
+    onRequest: [verificarJWT]
+  }, enviarEmail)
 }

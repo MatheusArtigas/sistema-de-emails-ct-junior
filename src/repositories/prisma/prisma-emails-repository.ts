@@ -1,5 +1,5 @@
 import { db } from '../../prisma/db.js'
-import type { EmailsRepository } from '../emails-repository.js'
+import type { DadosDeCriacaoDeEmail, EmailsRepository } from '../emails-repository.js'
 
 export class PrismaEmailsRepository implements EmailsRepository {
     async buscarEmailsRecebidos(idDoUsuario: string) {
@@ -23,5 +23,9 @@ export class PrismaEmailsRepository implements EmailsRepository {
         await db.orm.public.Email
             .whereUnique({ id })
             .delete()
+    }
+
+    async criarEmail(dados: DadosDeCriacaoDeEmail) {
+        return await db.orm.public.Email.create(dados)
     }
 }
