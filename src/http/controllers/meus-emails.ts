@@ -2,20 +2,25 @@ import type { FastifyRequest, FastifyReply } from 'fastify'
 import z from 'zod'
 import { PrismaEmailsRepository } from '../../repositories/prisma/prisma-emails-repository'
 import { DeletarEmailUseCase } from '../../use-cases/deletar-email'
+import { ListarEmailsRecebidosUseCase } from '../../use-cases/listar-emails-recebidos'
 
 export async function meusEmails(
   request: FastifyRequest,
   reply: FastifyReply
 ) {
-  const idDoUsuario = request.user.sub
+  const userId = request.user.sub
 
   const emailsRepository = new PrismaEmailsRepository()
 
-  const emails = await emailsRepository.buscarEmailsRecebidos(idDoUsuario)
+  const listarEmailsRecebidosUseCase = new ListarEmailsRecebidosUseCase(emailsRepository)
+
+  const { emails } = await listarEmailsRecebidosUseCase.execute({
+    userId,
+  })
 
   const resultado = emails.map((email) => ({
     titulo: email.title,
-    enviado_por: email.remetente.nome,
+    enviado_por: email.remetente?.nome,
     jaVisto: email.jaVisto,
     email_id: email.id,
   }))
