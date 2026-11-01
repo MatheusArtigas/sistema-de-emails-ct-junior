@@ -22,4 +22,5 @@ export interface EmailsRepository {
   buscarEmailPorId(id: string): Promise<Email | null>
   deletarEmail(id: string): Promise<void>
   criarEmail(dados: DadosDeCriacaoDeEmail): Promise<Email>
+  buscarEmailsEnviados(idDoUsuario: string): Promise<Email[]>
 }

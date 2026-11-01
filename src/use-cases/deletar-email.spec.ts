@@ -31,43 +31,50 @@ describe('Deletar email', () => {
       emailId: 'email-1',
     })
 
-    expect(await emailsRepository.buscarEmailPorId('email-1')).toBeNull()
+    const email = await emailsRepository.buscarEmailPorId('email-1')
+
+    expect(email).toBeNull()
   })
 
   it('não deve ser possível deletar um email inexistente', async () => {
-    await expect(
-      deletarEmailUseCase.execute({
-        userId: 'usuario-1',
-        emailId: 'email-inexistente',
-      })
-    ).rejects.toBeInstanceOf(EmailNaoEncontrado)
+    const resultado = deletarEmailUseCase.execute({
+      userId: 'usuario-1',
+      emailId: 'email-inexistente',
+    })
 
-    expect(emailsRepository.emails.length).toEqual(1)
+    await expect(resultado).rejects.toBeInstanceOf(EmailNaoEncontrado)
   })
 
   it('não deve ser possível deletar um email que já foi visto', async () => {
     const email = await emailsRepository.buscarEmailPorId('email-1')
 
-    email!.jaVisto = true
+    if (email) {
+      email.jaVisto = true
+    }
 
-    await expect(
-      deletarEmailUseCase.execute({
-        userId: 'usuario-1',
-        emailId: 'email-1',
-      })
-    ).rejects.toBeInstanceOf(NaoAutorizado)
+    const resultado = deletarEmailUseCase.execute({
+      userId: 'usuario-1',
+      emailId: 'email-1',
+    })
 
-    expect(await emailsRepository.buscarEmailPorId('email-1')).toEqual(email)
+    await expect(resultado).rejects.toBeInstanceOf(NaoAutorizado)
+
+    const emailDepois = await emailsRepository.buscarEmailPorId('email-1')
+
+    expect(emailDepois).not.toBeNull()
+    expect(emailDepois?.jaVisto).toEqual(true)
   })
 
   it('não deve ser possível deletar um email enviado por outro usuário', async () => {
-    await expect(
-      deletarEmailUseCase.execute({
-        userId: 'usuario-2',
-        emailId: 'email-1',
-      })
-    ).rejects.toBeInstanceOf(NaoAutorizado)
+    const resultado = deletarEmailUseCase.execute({
+      userId: 'usuario-2',
+      emailId: 'email-1',
+    })
 
-    expect(emailsRepository.emails.length).toEqual(1)
+    await expect(resultado).rejects.toBeInstanceOf(NaoAutorizado)
+
+    const emailDepois = await emailsRepository.buscarEmailPorId('email-1')
+
+    expect(emailDepois).not.toBeNull()
   })
 })

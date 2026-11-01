@@ -5,6 +5,7 @@ import { verificarJWT } from './middlewares/verifica-jwt.js'
 import { deletarEmail, meusEmails } from './controllers/meus-emails.js'
 import { atualizarFoto, atualizarNome } from './controllers/atualizar-perfil.js'
 import { enviarEmail } from './controllers/mandar-email.js'
+import { listarEmailsEnviados } from './controllers/emails-enviados.js'
 
 export async function rotas(app: FastifyInstance) {
   app.post('/user', registroDeUsuarios)
@@ -29,4 +30,8 @@ export async function rotas(app: FastifyInstance) {
   app.post('/email', {
     onRequest: [verificarJWT]
   }, enviarEmail)
+
+  app.get('/sent-emails', {
+    onRequest: [verificarJWT]
+  }, listarEmailsEnviados)
 }

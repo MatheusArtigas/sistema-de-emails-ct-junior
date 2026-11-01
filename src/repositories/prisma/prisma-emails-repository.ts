@@ -28,4 +28,12 @@ export class PrismaEmailsRepository implements EmailsRepository {
     async criarEmail(dados: DadosDeCriacaoDeEmail) {
         return await db.orm.public.Email.create(dados)
     }
+
+    async buscarEmailsEnviados(idDoUsuario: string) {
+        return db.orm.public.Email
+          .where((email) => email.idDeQuemEnviou.eq(idDoUsuario))
+          .orderBy((email) => email.data.desc())
+          .include('destinatario')
+          .all()
+    }
 }
