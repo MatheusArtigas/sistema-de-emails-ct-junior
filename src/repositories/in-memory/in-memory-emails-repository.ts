@@ -32,7 +32,17 @@ export class InMemoryEmailsRepository implements EmailsRepository {
 
     return email
   }
-    async buscarEmailsEnviados(idDoUsuario: string) {
-      return this.emails.filter((email) => email.idDeQuemEnviou === idDoUsuario)
+
+  async buscarEmailsEnviados(idDoUsuario: string) {
+    return this.emails.filter((email) => email.idDeQuemEnviou === idDoUsuario)
+  }
+
+
+  async visualizarEmail(id: string) {
+    const email = this.emails.find((email) => email.id === id)
+
+    if (email) {
+      email.jaVisto = true
+    }
   }
 }

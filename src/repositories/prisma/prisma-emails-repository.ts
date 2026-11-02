@@ -36,4 +36,13 @@ export class PrismaEmailsRepository implements EmailsRepository {
           .include('destinatario')
           .all()
     }
+
+
+    async visualizarEmail(id: string) {
+        await db.orm.public.Email
+          .where({ id })
+          .update({
+              jaVisto: true,
+          })
+    }   
 }

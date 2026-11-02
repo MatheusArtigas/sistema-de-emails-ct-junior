@@ -3,10 +3,11 @@ import z from 'zod'
 import { PrismaEmailsRepository } from '../../repositories/prisma/prisma-emails-repository'
 import { DeletarEmailUseCase } from '../../use-cases/deletar-email'
 import { ListarEmailsRecebidosUseCase } from '../../use-cases/listar-emails-recebidos'
+import { VerEmailUseCase } from '../../use-cases/ver-email'
 
 export async function meusEmails(
-  request: FastifyRequest,
-  reply: FastifyReply
+    request: FastifyRequest,
+    reply: FastifyReply
 ) {
   const userId = request.user.sub
 
@@ -31,8 +32,8 @@ export async function meusEmails(
 }
 
 export async function deletarEmail(
-  request: FastifyRequest,
-  reply: FastifyReply
+    request: FastifyRequest,
+    reply: FastifyReply
 ) {
   const esquemaDeletarEmail = z.object({
     id: z.uuid(),
@@ -51,4 +52,32 @@ export async function deletarEmail(
   })
 
   return reply.status(204).send()
+}
+
+export async function verEmail(
+    request: FastifyRequest,
+    reply: FastifyReply
+) {
+  const esquemaVerEmail = z.object({
+    id: z.uuid()
+  })
+
+  const { id } = esquemaVerEmail.parse(request.params)
+
+  const userId = request.user.sub
+
+  const emailsRepository = new PrismaEmailsRepository()
+  const verEmailUseCase = new VerEmailUseCase(emailsRepository)
+
+  const { email } = await verEmailUseCase.execute({
+    userId,
+    emailId: id,
+  })
+
+  return reply.status(200).send({
+    titulo: email.title,
+    content: email.content,
+    enviado_por: email.idDeQuemEnviou,
+  })
+
 }
