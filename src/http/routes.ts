@@ -6,6 +6,7 @@ import { deletarEmail, meusEmails, verEmail } from './controllers/meus-emails.js
 import { atualizarFoto, atualizarNome } from './controllers/atualizar-perfil.js'
 import { enviarEmail } from './controllers/mandar-email.js'
 import { listarEmailsEnviados } from './controllers/emails-enviados.js'
+import { verDadosCadastrais } from './controllers/dados-cadastrais.js'
 
 export async function rotas(app: FastifyInstance) {
   app.post('/user', registroDeUsuarios)
@@ -38,4 +39,8 @@ export async function rotas(app: FastifyInstance) {
   app.get('/email/:id', {
     onRequest: [verificarJWT]
   }, verEmail)
+
+  app.get('/me', {
+    onRequest: [verificarJWT]
+  }, verDadosCadastrais)
 }

@@ -23,4 +23,10 @@ export class PrismaUsersRepository implements UsersRepository {
       .where({ id: userId })
       .update({ nome: nomeNovo})
   }
+
+  async buscarUsuarioPorId(id: string) {
+    return db.orm.public.User
+      .whereUnique({ id })
+      .first()
+  }
 }
