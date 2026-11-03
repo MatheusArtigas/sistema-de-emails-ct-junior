@@ -8,6 +8,10 @@ import { EmailNaoEncontrado } from './errors/erro-email-nao-encontrado.js'
 import { NaoAutorizado } from './errors/erro-nao-autorizado.js'
 import 'temporal-polyfill/global'
 import { DestinatarioNaoEncontrado } from './errors/erro-destinatario-nao-encontrado.js'
+import cors from '@fastify/cors'
+import swagger from '@fastify/swagger'
+import swaggerUI from '@fastify/swagger-ui'
+import { configurarTratamentoDeErros } from './errors/error-handler.js'
 
 export const app = Fastify()
 
@@ -15,30 +19,35 @@ app.register(fastifyJwt, {
   secret: env.JWT_SECRET
 })
 
+app.register(cors, {
+  origin: true,
+})
+
+app.register(swagger, {
+  openapi: {
+    info: {
+      title: 'Sistema de Emails',
+      description: 'Documentação da API de emails',
+      version: '1.0.0',
+    },
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+        },
+      },
+    },
+  },
+})
+
+app.register(swaggerUI, {
+  routePrefix: '/docs',
+})
+
 const tratamentoPadraoDeErros = app.errorHandler
 
-app.setErrorHandler(function (error, request, reply) {
-  if (error instanceof UsuarioJaExiste) {
-    return reply.status(409).send({ message: error.message })
-  }
-
-  if (error instanceof ErroDeAutenticacao) {
-    return reply.status(401).send({ message: error.message })
-  }
-
-  if (error instanceof EmailNaoEncontrado) {
-    return reply.status(404).send({ message: error.message })
-  }
-
-  if (error instanceof NaoAutorizado) {
-    return reply.status(401).send({ message: error.message })
-  }
-
-  if (error instanceof DestinatarioNaoEncontrado) {
-    return reply.status(404).send({ message: error.message })
-  }
-
-  tratamentoPadraoDeErros.call(this, error, request, reply)
-})
+configurarTratamentoDeErros(app)
 
 app.register(rotas)
