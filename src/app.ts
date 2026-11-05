@@ -1,17 +1,13 @@
 import Fastify from 'fastify'
-import { UsuarioJaExiste } from './errors/usuario-ja-existe.js'
-import { ErroDeAutenticacao } from './errors/erro-de-autenticacao.js'
 import { rotas } from './http/routes.js'
 import fastifyJwt from '@fastify/jwt'
 import { env } from './env/index.js'
-import { EmailNaoEncontrado } from './errors/erro-email-nao-encontrado.js'
-import { NaoAutorizado } from './errors/erro-nao-autorizado.js'
 import 'temporal-polyfill/global'
-import { DestinatarioNaoEncontrado } from './errors/erro-destinatario-nao-encontrado.js'
 import cors from '@fastify/cors'
 import swagger from '@fastify/swagger'
 import swaggerUI from '@fastify/swagger-ui'
 import { configurarTratamentoDeErros } from './errors/error-handler.js'
+import  multipart  from '@fastify/multipart'
 
 export const app = Fastify()
 
@@ -21,6 +17,13 @@ app.register(fastifyJwt, {
 
 app.register(cors, {
   origin: true,
+})
+
+app.register(multipart, {
+  limits: {
+    fileSize: 5 * 1024 * 1024,
+    files: 1,
+  },
 })
 
 app.register(swagger, {

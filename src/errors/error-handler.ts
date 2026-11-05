@@ -4,6 +4,8 @@ import { ErroDeAutenticacao } from './erro-de-autenticacao.js'
 import { EmailNaoEncontrado } from './erro-email-nao-encontrado.js'
 import { NaoAutorizado } from './erro-nao-autorizado.js'
 import { DestinatarioNaoEncontrado } from './erro-destinatario-nao-encontrado.js'
+import { FormatoInvalido } from './erro-formato-da-imagem.js'
+import { UsuarioNaoEncontrado } from './usuario-nao-encontrado.js'
 
 export function configurarTratamentoDeErros(app: FastifyInstance) {
   const tratamentoPadraoDeErros = app.errorHandler
@@ -21,12 +23,20 @@ export function configurarTratamentoDeErros(app: FastifyInstance) {
       return reply.status(404).send({ message: error.message })
     }
 
+    if (error instanceof UsuarioNaoEncontrado) {
+      return reply.status(404).send({ message: error.message })
+    }
+
     if (error instanceof NaoAutorizado) {
       return reply.status(401).send({ message: error.message })
     }
 
     if (error instanceof DestinatarioNaoEncontrado) {
       return reply.status(404).send({ message: error.message })
+    }
+
+    if (error instanceof FormatoInvalido) {
+      return reply.status(400).send({ message: error.message })
     }
 
     return tratamentoPadraoDeErros.call(this, error, request, reply)

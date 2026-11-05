@@ -101,7 +101,7 @@ export async function rotas(app: FastifyInstance) {
       type: 'object',
       required: ['foto'],
       properties: {
-        foto: { type: 'string', format: 'uri' },
+        foto: { isFile: true },
       },
     },
 
