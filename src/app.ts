@@ -1,4 +1,6 @@
+import { resolve } from 'node:path'
 import Fastify from 'fastify'
+import fastifyStatic from '@fastify/static'
 import { rotas } from './http/routes.js'
 import fastifyJwt from '@fastify/jwt'
 import { env } from './env/index.js'
@@ -24,6 +26,13 @@ app.register(multipart, {
     fileSize: 5 * 1024 * 1024,
     files: 1,
   },
+})
+
+app.register(fastifyStatic, {
+  root: resolve('uploads'),
+  prefix: '/uploads/',
+  decorateReply: false,
+  index: false,
 })
 
 app.register(swagger, {

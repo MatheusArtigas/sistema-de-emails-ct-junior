@@ -18,13 +18,13 @@ describe('Atualizar foto de perfil', () => {
       senha: '603704',
     })
 
-    const foto = 'https://exemplo.com/foto.jpg'
+    const caminhoFoto = 'uploads/foto.jpg'
 
     await atualizarFotoUseCase.execute({
-      foto,
+      caminhoFoto,
       userId: usuario.id,
     })
 
-    expect(usuario.fotoDePerfil).toEqual(foto)
+    expect(usuario.fotoDePerfil).toEqual(caminhoFoto)
   })
 })

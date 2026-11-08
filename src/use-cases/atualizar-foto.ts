@@ -3,14 +3,14 @@ import type { UsersRepository } from "../repositories/users-repository"
 
 interface AtualizarFotoRequest {
   userId: string
-  foto: string
+  caminhoFoto: string
 }
 
 export class AtualizarFotoUseCase {
   constructor(private usersRepository: UsersRepository) {}
 
-    async execute({ userId, foto }: AtualizarFotoRequest) {
-        const usuario = await this.usersRepository.atualizarFotoDePerfil(foto, userId)
+    async execute({ userId, caminhoFoto }: AtualizarFotoRequest) {
+        const usuario = await this.usersRepository.atualizarFotoDePerfil(caminhoFoto, userId)
 
         if(!usuario) {
             throw new UsuarioNaoEncontrado()

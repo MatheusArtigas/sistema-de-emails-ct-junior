@@ -92,27 +92,40 @@ export async function rotas(app: FastifyInstance) {
 
   app.patch('/my-image', {
   onRequest: [verificarJWT],
+  config: {
+    swaggerTransform: ({ schema, url }) => ({
+      schema: {
+        ...schema,
+        consumes: ['multipart/form-data'],
+        body: {
+          type: 'object',
+          required: ['foto'],
+          properties: {
+            foto: { type: 'string', format: 'binary' },
+          },
+        },
+      },
+      url,
+    }),
+  },
   schema: {
     tags: ['Usuarios'],
     summary: 'Atualizar foto de perfil',
     security: [{ bearerAuth: [] }],
 
-    body: {
-      type: 'object',
-      required: ['foto'],
-      properties: {
-        foto: { isFile: true },
-      },
-    },
-
     response: {
-      204: {
+      200: {
         description: 'Foto atualizada com sucesso',
-        type: 'null',
+        type: 'object',
+        required: ['url'],
+        properties: {
+          url: { type: 'string', format: 'uri' },
+        },
       },
     },
   },
   }, atualizarFoto)
+
 
   app.patch('/my-name', {
   onRequest: [verificarJWT],
