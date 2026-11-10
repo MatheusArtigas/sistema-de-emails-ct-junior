@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest'
 import { InMemoryEmailsRepository } from '../repositories/in-memory/in-memory-emails-repository.js'
+import { InMemoryUsersRepository } from '../repositories/in-memory/in-memory-users-repository.js'
 import { ListarEmailsRecebidosUseCase } from './listar-emails-recebidos.js'
 
 let emailsRepository: InMemoryEmailsRepository
@@ -7,7 +8,8 @@ let listarEmailsRecebidosUseCase: ListarEmailsRecebidosUseCase
 
 describe('Listar emails recebidos', () => {
   beforeEach(() => {
-    emailsRepository = new InMemoryEmailsRepository()
+    const usersRepository = new InMemoryUsersRepository()
+    emailsRepository = new InMemoryEmailsRepository(usersRepository)
     listarEmailsRecebidosUseCase = new ListarEmailsRecebidosUseCase(emailsRepository)
   })
 

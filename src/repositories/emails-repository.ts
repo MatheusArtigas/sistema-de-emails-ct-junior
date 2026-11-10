@@ -10,6 +10,12 @@ export interface Email {
   idDeQuemRecebeu: string
 }
 
+export interface EmailComRemetente extends Email {
+  remetente: {
+    nome: string
+  }
+}
+
 export interface DadosDeCriacaoDeEmail {
   title: string
   content: string
@@ -19,7 +25,7 @@ export interface DadosDeCriacaoDeEmail {
 
 export interface EmailsRepository {
   buscarEmailsRecebidos(idDoUsuario: string): Promise<Email[]>
-  buscarEmailPorId(id: string): Promise<Email | null>
+  buscarEmailPorId(id: string): Promise<EmailComRemetente | null>
   deletarEmail(id: string): Promise<void>
   criarEmail(dados: DadosDeCriacaoDeEmail): Promise<Email>
   buscarEmailsEnviados(idDoUsuario: string): Promise<Email[]>

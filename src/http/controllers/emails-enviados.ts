@@ -18,7 +18,7 @@ export async function listarEmailsEnviados(
 
   const resultado = emails.map((email) => ({
     titulo: email.title,
-    enviado_por: email.destinatario?.nome,
+    destinatario: email.destinatario?.nome,
     jaVisto: email.jaVisto,
     email_id: email.id,
   }))

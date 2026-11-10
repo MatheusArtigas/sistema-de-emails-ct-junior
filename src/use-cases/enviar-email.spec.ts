@@ -11,7 +11,7 @@ let enviarEmailUseCase: EnviarEmailUseCase
 describe('Enviar Email Use Case', () => {
   beforeEach(() => {
     usersRepository = new InMemoryUsersRepository()
-    emailsRepository = new InMemoryEmailsRepository()
+    emailsRepository = new InMemoryEmailsRepository(usersRepository)
 
     enviarEmailUseCase = new EnviarEmailUseCase(
       usersRepository,

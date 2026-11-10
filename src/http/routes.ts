@@ -78,7 +78,7 @@ export async function rotas(app: FastifyInstance) {
               type: 'object',
               properties: {
                 titulo: { type: 'string' },
-                enviado_por: { type: 'string' },
+                remetente: { type: 'string' },
                 jaVisto: { type: 'boolean' },
                 email_id: { type: 'string', format: 'uuid' },
               },
@@ -222,7 +222,7 @@ export async function rotas(app: FastifyInstance) {
               type: 'object',
               properties: {
                 titulo: { type: 'string' },
-                enviado_por: { type: 'string' },
+                destinatario: { type: 'string' },
                 jaVisto: { type: 'boolean' },
                 email_id: { type: 'string', format: 'uuid' },
               },
@@ -255,7 +255,7 @@ export async function rotas(app: FastifyInstance) {
         properties: {
           titulo: { type: 'string' },
           content: { type: 'string' },
-          enviado_por: { type: 'string', format: 'uuid' },
+          remetente: { type: 'string' },
         },
       },
     },

@@ -14,6 +14,7 @@ export class PrismaEmailsRepository implements EmailsRepository {
     async buscarEmailPorId(id: string) {
         const email = await db.orm.public.Email
             .whereUnique({ id })
+            .include('remetente')
             .first()
         
         return email

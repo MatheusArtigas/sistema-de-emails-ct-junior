@@ -6,7 +6,6 @@ import { FormatoInvalido } from '../../errors/erro-formato-da-imagem.js'
 import { TipoDeUploadInvalido } from '../../errors/erro-tipo-de-upload.js'
 import { FotoNaoEnviada } from '../../errors/erro-foto-nao-enviada.js'
 import { env } from '../../env/index.js'
-
 import type { FastifyReply, FastifyRequest } from "fastify";
 import z from "zod";
 import { PrismaUsersRepository } from "../../repositories/prisma/prisma-users-repository";

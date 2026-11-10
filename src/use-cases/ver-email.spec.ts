@@ -1,15 +1,25 @@
 import { describe, it, expect, beforeEach } from 'vitest'
 import { InMemoryEmailsRepository } from '../repositories/in-memory/in-memory-emails-repository'
+import { InMemoryUsersRepository } from '../repositories/in-memory/in-memory-users-repository'
 import { VerEmailUseCase } from './ver-email'
 import { EmailNaoEncontrado } from '../errors/erro-email-nao-encontrado'
 import { NaoAutorizado } from '../errors/erro-nao-autorizado'
 
+let remetenteId: string
 let emailsRepository: InMemoryEmailsRepository
 let verEmailUseCase: VerEmailUseCase
 
 describe('Visualizar email', () => {
-  beforeEach(() => {
-    emailsRepository = new InMemoryEmailsRepository()
+  beforeEach(async () => {
+    const usersRepository = new InMemoryUsersRepository()
+    emailsRepository = new InMemoryEmailsRepository(usersRepository)
+
+    const remetente = await usersRepository.criarUsuario({
+      nome: 'Remetente',
+      email: 'remetente@example.com',
+      senha: '123456',
+    })
+    remetenteId = remetente.id
     verEmailUseCase = new VerEmailUseCase(emailsRepository)
   })
 
@@ -17,7 +27,7 @@ describe('Visualizar email', () => {
     const email = await emailsRepository.criarEmail({
       title: 'Email de teste',
       content: 'Conteudo do email',
-      idDeQuemEnviou: 'usuario-1',
+      idDeQuemEnviou: remetenteId,
       idDeQuemRecebeu: 'usuario-2',
     })
 
@@ -35,12 +45,12 @@ describe('Visualizar email', () => {
     const email = await emailsRepository.criarEmail({
       title: 'Email enviado',
       content: 'Conteudo do email',
-      idDeQuemEnviou: 'usuario-1',
+      idDeQuemEnviou: remetenteId,
       idDeQuemRecebeu: 'usuario-2',
     })
 
     const resultado = await verEmailUseCase.execute({
-      userId: 'usuario-1',
+      userId: remetenteId,
       emailId: email.id,
     })
 
@@ -52,7 +62,7 @@ describe('Visualizar email', () => {
     const email = await emailsRepository.criarEmail({
       title: 'Email privado',
       content: 'Conteudo privado',
-      idDeQuemEnviou: 'usuario-1',
+      idDeQuemEnviou: remetenteId,
       idDeQuemRecebeu: 'usuario-2',
     })
 
@@ -69,7 +79,7 @@ describe('Visualizar email', () => {
   it('não deve ser possível visualizar um email inexistente', async () => {
     await expect(() =>
       verEmailUseCase.execute({
-        userId: 'usuario-1',
+        userId: remetenteId,
         emailId: 'email-inexistente',
       })
     ).rejects.toBeInstanceOf(EmailNaoEncontrado)

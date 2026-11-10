@@ -21,7 +21,7 @@ export async function meusEmails(
 
   const resultado = emails.map((email) => ({
     titulo: email.title,
-    enviado_por: email.remetente?.nome,
+    remetente: email.remetente?.nome,
     jaVisto: email.jaVisto,
     email_id: email.id,
   }))
@@ -77,7 +77,7 @@ export async function verEmail(
   return reply.status(200).send({
     titulo: email.title,
     content: email.content,
-    enviado_por: email.idDeQuemEnviou,
+    remetente: email.remetente.nome,
   })
 
 }
