@@ -63,7 +63,9 @@ export async function atualizarFoto(
     throw error
   }
 
-  const url = `http://localhost:${env.PORT}/${caminhoFoto}`
+  const baseUrl = env.PUBLIC_BASE_URL ?? `http://localhost:${env.PORT}`
+  const url = `${baseUrl}/${caminhoFoto}`
+  
   return reply.status(200).send({ url })
 }
 
