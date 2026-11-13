@@ -19,6 +19,7 @@ app.register(fastifyJwt, {
 
 app.register(cors, {
   origin: true,
+  methods: ['GET', 'HEAD', 'POST', 'PATCH', 'DELETE']
 })
 
 app.register(multipart, {
